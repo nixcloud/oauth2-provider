@@ -35,7 +35,7 @@ public class MockedAuthorizationKeyRegistry implements AuthorizationCodeProvider
         // TODO: actually generate value and store it in db
         String code = authKeys.get(clientId);
         if (code == null) {
-            throw new UnsupportedOperationException("Only the hardcoded applications are allowed yet");
+            throw new UnsupportedOperationException("Only the hardcoded applications are allowed as of now");
         }
 
         return code;

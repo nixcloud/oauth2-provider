@@ -2,11 +2,10 @@ package eu.crushedpixel.oauth2.endpoints;
 
 import eu.crushedpixel.oauth2.mock.MockedApplicationRegistry;
 import eu.crushedpixel.oauth2.mock.MockedAuthorizationKeyRegistry;
-import eu.crushedpixel.oauth2.provider.ApplicationValidator;
+import eu.crushedpixel.oauth2.provider.ApplicationProvider;
 import eu.crushedpixel.oauth2.provider.AuthorizationCodeProvider;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
-import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
@@ -26,16 +25,18 @@ public class AuthEndpoint {
     @GET
     public Response authorize(@Context HttpServletRequest request)
             throws URISyntaxException, OAuthSystemException, OAuthProblemException {
+        /*
+         * creates an authorization code for an application requesting to use the OAuth2 service
+         */
 
-        ApplicationValidator validator = MockedApplicationRegistry.instance;
+        ApplicationProvider validator = MockedApplicationRegistry.instance;
         AuthorizationCodeProvider provider = MockedAuthorizationKeyRegistry.instance;
 
         try {
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
 
-            // we should use the response_type code for maximum security
-            // and consistency across services
-            if (!"code".equals(oauthRequest.getParam(OAuth.OAUTH_RESPONSE_TYPE))) {
+            // we only use the webapp oauth2 flow
+            if (!"code".equals(oauthRequest.getResponseType())) {
                 throw new UnsupportedOperationException("Only response_type code supported");
             }
 
@@ -59,11 +60,11 @@ public class AuthEndpoint {
                     .location(oauthRequest.getRedirectURI())
                     .buildQueryMessage();
 
-
             URI url = new URI(response.getLocationUri());
             return Response.status(response.getResponseStatus()).location(url).build();
 
         } catch (OAuthProblemException e) {
+            // TODO: display some different page?
             throw e;
         }
     }

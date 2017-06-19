@@ -1,7 +1,7 @@
 package eu.crushedpixel.oauth2.mock;
 
 import eu.crushedpixel.oauth2.models.OAuthApplication;
-import eu.crushedpixel.oauth2.provider.ApplicationValidator;
+import eu.crushedpixel.oauth2.provider.ApplicationProvider;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 
 import java.util.ArrayList;
@@ -11,7 +11,7 @@ import java.util.List;
 // supply one of these client_ids and secrets to e.g. mediawiki.
 // TODO: in the real-world app, we'll automatically create an application
 // TODO: for every services that connects using OAuth, and store/load these values in a DB.
-public class MockedApplicationRegistry implements ApplicationValidator {
+public class MockedApplicationRegistry implements ApplicationProvider {
 
     public static MockedApplicationRegistry instance = new MockedApplicationRegistry();
 

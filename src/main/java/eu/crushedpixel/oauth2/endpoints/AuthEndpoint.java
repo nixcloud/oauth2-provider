@@ -1,7 +1,7 @@
 package eu.crushedpixel.oauth2.endpoints;
 
 import eu.crushedpixel.oauth2.mock.MockedApplicationRegistry;
-import eu.crushedpixel.oauth2.mock.MockedAuthorizationKeyRegistry;
+import eu.crushedpixel.oauth2.mock.MockedAuthorizationCodeRegistry;
 import eu.crushedpixel.oauth2.provider.ApplicationProvider;
 import eu.crushedpixel.oauth2.provider.AuthorizationCodeProvider;
 import org.apache.oltu.oauth2.as.request.OAuthAuthzRequest;
@@ -24,13 +24,13 @@ public class AuthEndpoint {
 
     @GET
     public Response authorize(@Context HttpServletRequest request)
-            throws URISyntaxException, OAuthSystemException, OAuthProblemException {
+            throws URISyntaxException, OAuthSystemException {
         /*
          * creates an authorization code for an application requesting to use the OAuth2 service
          */
 
         ApplicationProvider validator = MockedApplicationRegistry.instance;
-        AuthorizationCodeProvider provider = MockedAuthorizationKeyRegistry.instance;
+        AuthorizationCodeProvider provider = MockedAuthorizationCodeRegistry.instance;
 
         try {
             OAuthAuthzRequest oauthRequest = new OAuthAuthzRequest(request);
@@ -42,7 +42,7 @@ public class AuthEndpoint {
 
             validator.validateClientId(oauthRequest.getClientId());
 
-            // at this point, the user usually has to grant access to the third-party-app
+            // at this point, the nixcloudUser usually has to grant access to the third-party-app
             // this shouldn't be necessary in our service, as we only register application
             // keys for the installed services (e.g. mediawiki).
             // instead, we just generate an access token and redirect to the desired redirect_uri.
@@ -64,8 +64,11 @@ public class AuthEndpoint {
             return Response.status(response.getResponseStatus()).location(url).build();
 
         } catch (OAuthProblemException e) {
-            // TODO: display some different page?
-            throw e;
+            OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)
+                    .error(e)
+                    .buildJSONMessage();
+
+            return Response.status(response.getResponseStatus()).entity(response.getBody()).build();
         }
     }
 

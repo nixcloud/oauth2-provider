@@ -12,8 +12,17 @@
             org.glassfish.jersey.servlet.ServletContainer
         </servlet-class>
         <init-param>
+            <!-- for the json output feature -->
+            <param-name>jersey.config.server.provider.classnames</param-name>
+            <param-value>org.glassfish.jersey.jackson.JacksonFeature</param-value>
+        </init-param>
+        <init-param>
             <param-name>jersey.config.server.provider.packages</param-name>
-            <param-value>eu.crushedpixel.oauth2.endpoints</param-value>
+            <param-value>eu.crushedpixel.oauth2.endpoints;eu.crushedpixel.oauth2.filters</param-value>
+        </init-param>
+        <init-param>
+            <param-name>javax.ws.rs.container.ContainerRequestFilter</param-name>
+            <param-value>eu.crushedpixel.oauth2.filters.AccessTokenValidator</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>

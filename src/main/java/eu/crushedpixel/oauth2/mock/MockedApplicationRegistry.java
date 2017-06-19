@@ -13,7 +13,7 @@ import java.util.List;
 // TODO: for every services that connects using OAuth, and store/load these values in a DB.
 public class MockedApplicationRegistry implements ApplicationProvider {
 
-    public static MockedApplicationRegistry instance = new MockedApplicationRegistry();
+    public static final MockedApplicationRegistry instance = new MockedApplicationRegistry();
 
     private final List<OAuthApplication> applications = new ArrayList<OAuthApplication>() {
         {
@@ -26,14 +26,14 @@ public class MockedApplicationRegistry implements ApplicationProvider {
 
     @Override
     public void validateClientId(String clientId) throws OAuthProblemException {
-        if (!applications.stream().anyMatch(app -> app.clientId.equals(clientId))) {
+        if (applications.stream().noneMatch(app -> app.clientId.equals(clientId))) {
             throw OAuthProblemException.error("Invalid client_id");
         }
     }
 
     @Override
     public void validateClientSecret(String clientId, String clientSecret) throws OAuthProblemException {
-        if (!applications.stream().anyMatch(app -> app.clientId.equals(clientId)
+        if (applications.stream().noneMatch(app -> app.clientId.equals(clientId)
                 && app.clientSecret.equals(clientSecret))) {
             throw OAuthProblemException.error("Invalid client_id/client_secret combination");
         }

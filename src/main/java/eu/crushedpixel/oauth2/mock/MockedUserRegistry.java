@@ -10,6 +10,6 @@ public class MockedUserRegistry implements UserProvider {
 
     @Override
     public NixcloudUser getAuthenticatedUser() {
-        return new NixcloudUser("some_id", "some_username");
+        return new NixcloudUser("some_id", "some_username", "some_email");
     }
 }

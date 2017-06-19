@@ -12,10 +12,8 @@ import org.apache.oltu.oauth2.rs.request.OAuthAccessResourceRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.NameBinding;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
-import javax.ws.rs.container.PreMatching;
 import javax.ws.rs.container.ResourceInfo;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
@@ -23,12 +21,8 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 
 @Provider
-@PreMatching
-@AccessTokenValidator.AuthenticatedMethod
+@AuthenticatedMethod
 public class AccessTokenValidator implements ContainerRequestFilter {
-
-    @NameBinding
-    public @interface AuthenticatedMethod {}
 
     @Context
     private HttpServletRequest httpRequest;

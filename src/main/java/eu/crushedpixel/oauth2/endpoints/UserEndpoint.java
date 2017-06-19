@@ -1,6 +1,6 @@
 package eu.crushedpixel.oauth2.endpoints;
 
-import eu.crushedpixel.oauth2.filters.AccessTokenValidator;
+import eu.crushedpixel.oauth2.filters.AuthenticatedMethod;
 import eu.crushedpixel.oauth2.mock.MockedAuthorizationCodeRegistry;
 import eu.crushedpixel.oauth2.models.AccessToken;
 import eu.crushedpixel.oauth2.models.NixcloudUser;
@@ -22,9 +22,21 @@ import javax.ws.rs.core.Response;
 @Path("/user")
 public class UserEndpoint {
 
+    /**
+     * Simple wrapper to achieve the JSON structure expected by the mediawiki OAuth2 extension.
+     */
+    private class UserResponse {
+
+        public final NixcloudUser user;
+
+        public UserResponse(NixcloudUser user) {
+            this.user = user;
+        }
+    }
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @AccessTokenValidator.AuthenticatedMethod
+    @AuthenticatedMethod
     public Response user(@Context HttpServletRequest request) throws OAuthSystemException {
         /*
          * return some information about the authenticated nixcloud user
@@ -40,7 +52,7 @@ public class UserEndpoint {
             NixcloudUser user = codeProvider.getAuthorizationCode(token.authorizationCode).user;
 
             // return user information as json
-            return Response.ok(user).build();
+            return Response.ok(new UserResponse(user)).build();
 
         } catch (OAuthProblemException e) {
             OAuthResponse response = OAuthASResponse.errorResponse(HttpServletResponse.SC_BAD_REQUEST)

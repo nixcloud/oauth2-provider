@@ -1,10 +1,8 @@
 package eu.crushedpixel.oauth2.filters;
 
 import eu.crushedpixel.oauth2.mock.MockedAccessTokenRegistry;
-import eu.crushedpixel.oauth2.mock.MockedAuthorizationCodeRegistry;
 import eu.crushedpixel.oauth2.models.AccessToken;
 import eu.crushedpixel.oauth2.provider.AccessTokenProvider;
-import eu.crushedpixel.oauth2.provider.AuthorizationCodeProvider;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.ParameterStyle;
@@ -31,7 +29,6 @@ public class AccessTokenValidator implements ContainerRequestFilter {
     private ResourceInfo resourceInfo;
 
     private AccessTokenProvider tokenProvider = MockedAccessTokenRegistry.instance;
-    private AuthorizationCodeProvider codeProvider = MockedAuthorizationCodeRegistry.instance;
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {

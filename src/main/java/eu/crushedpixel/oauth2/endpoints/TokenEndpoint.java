@@ -3,12 +3,10 @@ package eu.crushedpixel.oauth2.endpoints;
 import eu.crushedpixel.oauth2.mock.MockedAccessTokenRegistry;
 import eu.crushedpixel.oauth2.mock.MockedApplicationRegistry;
 import eu.crushedpixel.oauth2.mock.MockedAuthorizationCodeRegistry;
-import eu.crushedpixel.oauth2.mock.MockedUserRegistry;
 import eu.crushedpixel.oauth2.models.AccessToken;
 import eu.crushedpixel.oauth2.provider.AccessTokenProvider;
 import eu.crushedpixel.oauth2.provider.ApplicationProvider;
 import eu.crushedpixel.oauth2.provider.AuthorizationCodeProvider;
-import eu.crushedpixel.oauth2.provider.UserProvider;
 import org.apache.oltu.oauth2.as.response.OAuthASResponse;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.message.OAuthResponse;
@@ -36,7 +34,6 @@ public class TokenEndpoint {
         ApplicationProvider validator = MockedApplicationRegistry.instance;
         AuthorizationCodeProvider codeProvider = MockedAuthorizationCodeRegistry.instance;
         AccessTokenProvider tokenProvider = MockedAccessTokenRegistry.instance;
-        UserProvider userProvider = MockedUserRegistry.instance;
 
         try {
             // we can't use Oltu's handy OAuthTokenRequest here, because
